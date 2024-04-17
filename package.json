@@ -2,7 +2,7 @@
   "name": "ASR-portal-react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://sunbirdai.github.io",
+  "homepage": "https://sunbirdai.github.io/ASR-portal-react",
   "dependencies": {
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.8.2",
