@@ -3,8 +3,10 @@
 const FEEDBACK_URL = process.env.REACT_APP_FEEDBACK_URL;
 // const HUGGING_FACE_API_KEY = process.env.REACT_APP_HUGGING_FACE_API_KEY;
 export const tracking_id = process.env.REACT_APP_GA4_TRACKING_ID;
+export const token = process.env.REACT_APP_SB_API_TOKEN;
 
-// const translationUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/nllb_translate`;
+const asrUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/stt`;
+
 // const textToSpeechUrl = "https://api-inference.huggingface.co/models/Sunbird/sunbird-lug-tts";
 
 
@@ -12,10 +14,35 @@ export const tracking_id = process.env.REACT_APP_GA4_TRACKING_ID;
  * Recognizes speech from an audio file and returns the transcribed text.
  * @param {Blob} audioData - The audio file as a Blob.
  * @param {string} languageCode - The language code (e.g.,  "eng","lug","nyn","teo","lgg","ach").
+ * @param {string} adapterCode - The adapter code (e.g.,  "eng","lug","nyn","teo","lgg","ach").
  * @return {Promise<string>} The recognized text.
  */
-export async function recognizeSpeech(audioData, languageCode) {
-    
+export async function recognizeSpeech(audioData, languageCode, adapterCode) {
+    const formData = new FormData();
+    formData.append('audio', audioData); // You might need to adjust the filename.
+    formData.append('language', languageCode);
+    formData.append('adapter', adapterCode);
+
+    try {
+        const response = await fetch(asrUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${process.env.REACT_APP_SB_API_TOKEN}`,
+                'Accept': 'application/json'
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.audio_transcription;
+    } catch (error) {
+        console.error('Error recognizing speech:', error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
 }
 
 export const sendFeedback = async (feedback, CorrectTranslation, username, sourceText, translation, from, to) => {

@@ -1,3 +1,4 @@
+import { TextArea } from "./TranscriptionTextArea.styles";
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -6,7 +7,7 @@ import ContentCopy from '@mui/icons-material/ContentCopy';
 import Feedback from '../Feedback';
 
 
-const TranslateTextArea = ({
+const TranscriptionTextArea = ({
     placeholder,
     text, // This will be the recognized text from audio
     setText, // Function to update the recognized text
@@ -28,7 +29,7 @@ const TranslateTextArea = ({
 
     return (
         <div className="bg-white shadow">
-            <textarea
+            <TextArea
                 placeholder={placeholder}
                 readOnly={true}
                 value={text}
@@ -59,4 +60,4 @@ const TranslateTextArea = ({
     );
 };
 
-export default TranslateTextArea;
+export default TranscriptionTextArea;
