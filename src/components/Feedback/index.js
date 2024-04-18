@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Alert, Button, TextField } from "@mui/material";
 import { ThumbDown, ThumbUp } from "@mui/icons-material";
 import { sendFeedback } from "../../API";
+import { styles } from './Feedback.styles';
 
 const Feedback = ({ sourceText, transcription, from, to }) => {
   const [rated, setRated] = useState(false);
@@ -42,8 +43,8 @@ const Feedback = ({ sourceText, transcription, from, to }) => {
   };
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <p>Please help us improve the Transcription quality with your feedback.</p>
+    <div style={styles.container}>
+    <p style={styles.feedbackText}>Please help us improve the Transcription quality with your feedback.</p>
       <div className="grid grid-cols-2 gap-4">
         <Button
           variant={rating === 1 ? "contained" : "outlined"}
@@ -61,7 +62,7 @@ const Feedback = ({ sourceText, transcription, from, to }) => {
           onClick={() => setShowDialog(true)}
           fullWidth
         >
-          Good Transcription
+          Bad Transcription
         </Button>
       </div>
       {showAlert && <Alert severity="success">Thanks for the feedback</Alert>}

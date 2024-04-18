@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { MainContainer, LanguageDropdown } from "./Transcription.styles";
-import AudioInput from '../AudioInput/AudioInput'; // Adjust based on actual file structure
+import AudioInput from '../AudioInput'; // Adjust based on actual file structure
 import TranscriptionTextArea from '../TranscriptionTextArea';
 // import SamplePhrases from "../SamplePhrases";
 import { recognizeSpeech } from "../../API"; // Function to convert speech to text

@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 import Snackbar from '@mui/material/Snackbar';
 import ContentCopy from '@mui/icons-material/ContentCopy';
-import Feedback from '../Feedback';
+// import Feedback from '../Feedback';
 
 
 const TranscriptionTextArea = ({
@@ -28,7 +28,7 @@ const TranscriptionTextArea = ({
     }
 
     return (
-        <div className="bg-white shadow">
+        <div className="bg-white shadow" style={{ position: 'relative', height: '100%' }}>
             <TextArea
                 placeholder={placeholder}
                 readOnly={true}
@@ -42,14 +42,18 @@ const TranscriptionTextArea = ({
                 disabled={!text}
                 endIcon={<ContentCopy />}
                 size="small"
-                style={{ marginLeft: 'auto' }}
+                style={{
+                    position: 'absolute',
+                    right: '20px',
+                    bottom: '20px',
+                }}
             >
                 Copy
             </Button>
-            {text && <Feedback
+            {/* {text && <Feedback
                 text={text}
                 onProvideFeedback={onProvideFeedback}
-            />}
+            />} */}
             <Snackbar
                 open={copySuccess}
                 autoHideDuration={3000}
