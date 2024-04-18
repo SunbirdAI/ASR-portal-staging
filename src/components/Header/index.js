@@ -5,7 +5,7 @@ const Header = () => (
     <Nav>
         <img className="h-[40px]" alt="Logo" src={img}/>
         <Title>
-            ASR SAMPLE.
+            Speech To Text.
         </Title>
     </Nav>
 );
