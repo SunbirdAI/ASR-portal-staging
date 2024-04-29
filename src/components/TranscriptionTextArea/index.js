@@ -36,7 +36,7 @@ const TranscriptionTextArea = ({
                 onChange={(e) => setText(e.target.value)}
                 className="text-area-class"
             />
-            {isLoading && <LinearProgress color="secondary" />}
+            {isLoading && <LinearProgress color="secondary"/>}
             <Button
                 onClick={copyToClipboard}
                 disabled={!text}
