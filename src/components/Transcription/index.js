@@ -67,13 +67,11 @@ const Transcription = () => {
     const handleCopyToClipboard = useCallback(async () => {
         if (textOutput) {
             await navigator.clipboard.writeText(textOutput);
-            // Implement feedback to user about copy success
         }
     }, [textOutput]);
 
     // Optional: Handler for providing feedback
     const handleProvideFeedback = useCallback((feedback) => {
-        // Implement feedback submission logic
         console.log(feedback);
     }, []);
 
@@ -90,12 +88,12 @@ const Transcription = () => {
                     setLanguage={setLanguage}
                     isLoading={isLoading}
                 />
-                <AudioPlayer audioSrc={audioSrc} />
+                <AudioPlayer audioSrc={audioSrc} style={{ padding: '10px' }} />
             </div>
             <TranscriptionTextArea
                 placeholder="Recognized text will appear here"
                 text={textOutput}
-                setText={setTextOutput} // Optionally allow users to edit the recognized text
+                setText={setTextOutput} 
                 isLoading={isLoading}
                 onCopyToClipboard={handleCopyToClipboard}
                 onProvideFeedback={handleProvideFeedback}
