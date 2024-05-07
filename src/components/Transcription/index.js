@@ -14,18 +14,18 @@ const sourceOptions = [
         label: 'Acholi',
         value: 'ach'
     },
-    {
-        label: 'Ateso',
-        value: 'teo'
-    },
-    {
-        label: 'Lugbara',
-        value: 'lgg'
-    },
-    {
-        label: 'Runyankole',
-        value: 'nyn'
-    },
+    // {
+    //     label: 'Ateso',
+    //     value: 'teo'
+    // },
+    // {
+    //     label: 'Lugbara',
+    //     value: 'lgg'
+    // },
+    // {
+    //     label: 'Runyankole',
+    //     value: 'nyn'
+    // },
     {
         label: 'English',
         value: 'eng'
