@@ -1,9 +1,9 @@
-import {Nav, Title} from "./Header.styles";
+import {Nav, Title, Logo} from "./Header.styles";
 import img from '../../images/logo.png';
 
 const Header = () => (
     <Nav>
-        <img className="h-[40px]" alt="Logo" src={img}/>
+        <Logo alt="Logo" src={img}/>
         <Title>
             Speech To Text.
         </Title>
