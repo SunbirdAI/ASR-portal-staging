@@ -23,5 +23,17 @@ export const Title = styled.h1`
     w-full
     right-0
     text-center
-    `}
+  `}
+
+  @media (max-width: 600px) {
+    ${tw`text-2xl`} /* Adjust as needed */
+  }
+`;
+
+export const Logo = styled.img`
+  ${tw`h-10`} /* 40px */
+
+  @media (max-width: 600px) {
+    ${tw`h-8`} /* Adjust as needed */
+  }
 `;
