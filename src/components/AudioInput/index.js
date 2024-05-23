@@ -34,22 +34,9 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
         };
     }, []);
 
-    // const toggleRecording = () => {
-    //     if (!mediaRecorder) return;
-
-    //     if (recording) {
-    //         mediaRecorder.stop();
-    //         setRecording(false);
-    //     } else {
-    //         setAudioData([]); // Clear previous recordings
-    //         mediaRecorder.start();
-    //         setRecording(true);
-    //     }
-    // };
-
     const toggleRecording = () => {
         if (!mediaRecorder) return;
-    
+
         try {
             if (mediaRecorder.state === 'inactive' && !recording) {
                 setAudioData([]); // Clear previous recordings
@@ -61,10 +48,8 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
             }
         } catch (error) {
             console.error('Error handling MediaRecorder:', error);
-            // Optionally, update the UI or state to reflect the error
         }
     };
-    
 
     useEffect(() => {
         if (!recording && audioData.length > 0) {
@@ -76,7 +61,19 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file && file.type.startsWith('audio/')) {
-            onAudioSubmit(file);
+            if (file.size > 15 * 1024 * 1024) {
+                alert("File size exceeds 15MB. Please contact the Sunbird team for support.");
+                return;
+            }
+
+            const audio = new Audio(URL.createObjectURL(file));
+            audio.onloadedmetadata = () => {
+                if (audio.duration > 15 * 60) {
+                    alert("Audio duration exceeds 15 minutes. Please contact the Sunbird team for support.");
+                } else {
+                    onAudioSubmit(file);
+                }
+            };
         } else {
             alert("Please drop only audio files.");
         }
@@ -152,7 +149,6 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
                 </Button>
             </div>
         </div>
-
     );
 };
 
@@ -172,4 +168,3 @@ const StopIcon = () => (
         <path d="M9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64l-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z" />
     </SvgIcon>
 );
-
