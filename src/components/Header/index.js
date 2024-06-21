@@ -1,12 +1,13 @@
-import {Nav, Title, Logo} from "./Header.styles";
+import {Nav, Title, Logo, DropdownMenu} from "./Header.styles";
 import img from '../../images/logo.png';
 
 const Header = () => (
-    <Nav>
+    <Nav >
         <Logo alt="Logo" src={img}/>
         <Title>
             Speech To Text.
         </Title>
+        <DropdownMenu/>
     </Nav>
 );
 

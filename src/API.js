@@ -7,6 +7,8 @@ export const token = process.env.REACT_APP_SB_API_TOKEN;
 
 const asrUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/stt`;
 
+const asrDbUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/stt/database`
+
 // const textToSpeechUrl = "https://api-inference.huggingface.co/models/Sunbird/sunbird-lug-tts";
 
 
@@ -44,6 +46,31 @@ export async function recognizeSpeech(audioData, languageCode, adapterCode) {
         throw error; // Re-throw the error to be handled by the caller
     }
 }
+
+
+
+export async function getTranscripts(){
+    try{
+        const response = await fetch(asrDbUrl, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${process.env.REACT_APP_SB_API_TOKEN}`,
+                'Accept': 'application/json'
+            },
+        })
+
+        if(!response.ok){
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch(error){
+        console.log(error);
+        throw error;
+    }
+}
+
 
 export const sendFeedback = async (feedback, CorrectTranslation, username, sourceText, translation, from, to) => {
     const time = Date.now();
