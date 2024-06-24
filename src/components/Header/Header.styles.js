@@ -24,7 +24,7 @@ export const DropdownMenu = () => {
 
   const navItems = [
     {path:"/",link:"Home"},
-    {path:"/Files",link:"Recent Files"}
+    {path:"/files",link:"Recent Files"}
 
   ]
 
@@ -88,6 +88,7 @@ export const Title = styled.h1`
     text-4xl
     md:absolute
     w-full
+    max-md:hidden
     
     text-center
   `}

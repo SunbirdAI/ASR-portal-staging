@@ -7,6 +7,7 @@ import {useEffect} from "react";
 import {tracking_id} from "./API";
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import  Files  from "./components/Files/Files";
+import View from "./components/View/View";
 
 
 
@@ -23,12 +24,8 @@ function App() {
             <Routes>
                 
                     <Route path="/" element={<Wrapper><Transcription/></Wrapper> }/>
-                    <Route path="/Files" element={ <Wrapper>
-                       
-                            <Files/>
-                        
-                        
-                        </Wrapper>}/>
+                    <Route path="/files" element={<Wrapper><Files/></Wrapper>}/>
+                    <Route path="/files/edit/:id" element={<Wrapper><View/></Wrapper>}/>
                
             </Routes>
             
