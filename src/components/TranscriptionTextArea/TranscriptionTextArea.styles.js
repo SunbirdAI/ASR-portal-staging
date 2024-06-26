@@ -1,55 +1,27 @@
-import tw, {styled} from "twin.macro";
-
-export const StyledTextArea = styled.textarea`
-    width: 100%;
-    height: 100%
-    overflow-y: auto; /* Enables scrolling for very long texts */
-    resize: vertical; /* Allows the user to resize the textarea vertically */
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: inset 0 1px 3px #ddd;
-    margin-top: 8px;
-    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-`;
+import tw, { styled } from "twin.macro";
 
 export const TextArea = styled.textarea`
-  ${tw`
+   ${tw`
     w-full
     h-full
-    px-3
-    py-1.5
-    font-normal
-    text-2xl md:text-4xl
+    relative
+    p-4  // Smaller base padding
     text-gray-700
     rounded
     transition
-    placeholder:text-4xl
+    shadow-lg
+    rounded-lg
     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-   `}
-  
-  //clip-path: inset(0 3ch 0 0);
-  //animation: l 1s steps(4) infinite;
-  //
-  //@keyframes l {
-  //  to {
-  //    clip-path: inset(0 -1ch 0 0);
-  //  }
-  //}
-`;
+  `}
 
-export const LanguageDropdown = styled.select`
-  ${tw`
-    px-3
-    py-1.5
-    mx-3
-    my-1.5
-    max-w-[250px]
-    overflow-hidden
-    break-normal
-    border border-solid border-gray-300
-    rounded
-    ease-in-out
-    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-    `}
+  font-size: 16px; // Base font size for larger screens
+  @media (max-width: 768px) {
+    font-size: 14px; // Smaller font size for tablets
+    padding: 3rem;  // Slightly smaller padding
+  }
+  @media (max-width: 480px) {
+    font-size: 12px; // Even smaller font size for mobile phones
+    padding: 2rem;  // Minimal padding to increase space
+    height: 200px; // Fixed smaller height for very small devices
+  }
 `;
