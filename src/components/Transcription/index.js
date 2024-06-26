@@ -103,7 +103,7 @@ const Transcription = () => {
     );
 };
 
-const AudioPlayer = ({ audioSrc }) => {
+export const AudioPlayer = ({ audioSrc }) => {
     if (!audioSrc) {
         return null;
     }
@@ -114,6 +114,8 @@ const AudioPlayer = ({ audioSrc }) => {
         </audio>
     );
 };
+
+
 
 
 export default Transcription;

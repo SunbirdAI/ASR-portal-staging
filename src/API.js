@@ -7,6 +7,9 @@ export const token = process.env.REACT_APP_SB_API_TOKEN;
 
 const asrUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/stt`;
 
+const asrDbUrl = `${process.env.REACT_APP_SB_API_URL}/transcriptions`
+
+
 // const textToSpeechUrl = "https://api-inference.huggingface.co/models/Sunbird/sunbird-lug-tts";
 
 
@@ -42,6 +45,80 @@ export async function recognizeSpeech(audioData, languageCode, adapterCode) {
     } catch (error) {
         console.error('Error recognizing speech:', error);
         throw error; // Re-throw the error to be handled by the caller
+    }
+}
+
+
+
+export async function getTranscripts(){
+    try{
+        const response = await fetch(`${asrDbUrl}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${process.env.REACT_APP_SB_API_TOKEN}`,
+                'Accept': 'application/json'
+            },
+        })
+
+        if(!response.ok){
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch(error){
+        console.log(error);
+        throw error;
+    }
+}
+
+export async function getSingleTranscript(id){
+    const asrDbSingleUrl = `${asrDbUrl}/${id}`
+    try{
+        const response = await fetch(asrDbSingleUrl, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${process.env.REACT_APP_SB_API_TOKEN}`,
+                'Accept': 'application/json'
+            },
+        })
+
+        if(!response.ok){
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch(error){
+        console.log(error);
+        throw error;
+    }
+}
+
+export async function updateTranscript(id, transcript){
+    const asrDbUpdateUrl = `${asrDbUrl}/${id}`
+
+    const formData = new FormData();
+    formData.append('transcription_text', transcript); 
+    try{
+        const response = await fetch(asrDbUpdateUrl, {
+            method: "PUT",
+            headers: {
+                'Authorization': `Bearer ${process.env.REACT_APP_SB_API_TOKEN}`,
+                'Accept': 'application/json'
+            },
+            body :  formData
+        })
+
+        if(!response.ok){
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch(error){
+        console.log(error);
+        throw error;
     }
 }
 

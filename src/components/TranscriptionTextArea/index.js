@@ -34,7 +34,7 @@ const TranscriptionTextArea = ({
                 readOnly={true}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="text-area-class"
+                className="text-area-className"
             />
             {isLoading && <LinearProgress color="secondary"/>}
             <Button
