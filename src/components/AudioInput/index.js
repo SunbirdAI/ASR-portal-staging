@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import SvgIcon from '@mui/material/SvgIcon';
-import Swal from 'sweetalert2';
+import { TailSpin } from 'react-loader-spinner';
+import { Container, DropZoneContainer, RecordingArea, LoadingContainer } from './AudioInput.styles';
 
 const AudioInput = ({ onAudioSubmit, isLoading }) => {
     const [dragActive, setDragActive] = useState(false);
@@ -62,33 +63,7 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file && file.type.startsWith('audio/')) {
-            if (file.size > 15 * 1024 * 1024) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'File Too Large',
-                    text: 'The file you are trying to upload exceeds the maximum allowable size of 15MB. For larger file and longer audio support, please contact the Sunbird team at info@sunbird.ai.',
-                });
-                return;
-            }
-
-            const audio = new Audio(URL.createObjectURL(file));
-            audio.onloadedmetadata = () => {
-                if (audio.duration > 15 * 60) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Audio Too Long',
-                        text: 'The file you are trying to upload exceeds the maximum allowable Audio duration of 15 minutes. For larger file and longer audio support, please contact the Sunbird team at info@sunbird.ai.',
-                    });
-                } else {
-                    onAudioSubmit(file);
-                }
-            };
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Invalid File',
-                text: 'Please drop only audio files.',
-            });
+            onAudioSubmit(file);
         }
     };
 
@@ -110,37 +85,29 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
     const handleButtonClick = () => document.getElementById('fileInput').click();
 
     return (
-        <div className="audio-input-container" style={{ padding: '10px' }}>
-            <div
-                className="drop-zone"
+        <Container>
+            <DropZoneContainer
+                className={`drop-zone ${dragActive ? 'active' : ''}`}
                 onDragOver={handleDragOver}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={handleButtonClick}
-                style={{
-                    border: dragActive ? '2px dashed #000' : '2px dashed #ccc',
-                    padding: '20px',
-                    textAlign: 'center',
-                    backgroundColor: dragActive ? '#e9e9e9' : '',
-                    cursor: 'pointer',
-                    marginBottom: '20px'
-                }}
             >
-                {isLoading ? "Processing..." : "Drag and drop your audio file here or click to select a file."}
-            </div>
-            <input
-                id="fileInput"
-                type="file"
-                accept="audio/*"
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-                disabled={isLoading}
-            />
-            <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                <span style={{ fontSize: '16px', fontWeight: 'bold', display: 'block' }}>
-                    Or record your audio
-                </span>
+                {isLoading ? (
+                    <LoadingContainer>
+                        <TailSpin
+                            height="50"
+                            width="50"
+                            color="#4fa94d"
+                            ariaLabel="loading"
+                        />
+                    </LoadingContainer>
+                ) : (
+                    "Drag and drop your audio file here or click to select a file."
+                )}
+            </DropZoneContainer>
+            <RecordingArea>
                 <Button
                     variant="contained"
                     color="primary"
@@ -160,8 +127,16 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
                 >
                     {recording ? <StopIcon /> : <MicIcon />}
                 </Button>
-            </div>
-        </div>
+            </RecordingArea>
+            <input
+                id="fileInput"
+                type="file"
+                accept="audio/*"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+                disabled={isLoading}
+            />
+        </Container>
     );
 };
 
@@ -169,15 +144,12 @@ export default AudioInput;
 
 const MicIcon = () => (
     <SvgIcon>
-        <path d="M0 0h24v24H0z" fill="none" />
         <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z" />
     </SvgIcon>
 );
 
 const StopIcon = () => (
     <SvgIcon sx={{ color: 'red' }}>
-        <path d="M0 0h24v24H0z" fill="none" />
-        <circle cx="9" cy="9" r="4" />
-        <path d="M9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64l-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z" />
+        <circle cx="12" cy="12" r="10" />
     </SvgIcon>
 );

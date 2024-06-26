@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { MainContainer, LanguageDropdown } from "./Transcription.styles";
+import { MainContainer, LanguageDropdown, ResponsiveContainer, ButtonContainer } from "./Transcription.styles";
 import AudioInput from '../AudioInput'; // Adjust based on actual file structure
 import TranscriptionTextArea from '../TranscriptionTextArea';
-// import SamplePhrases from "../SamplePhrases";
+import Button from '@mui/material/Button';
 import { recognizeSpeech } from "../../API"; // Function to convert speech to text
+import Footer from '../Footer';
 
 const sourceOptions = [
     {
@@ -30,90 +31,85 @@ const sourceOptions = [
         label: 'English',
         value: 'eng'
     }
-]
+];
 
 const Transcription = () => {
     const [language, setLanguage] = useState('lug'); // Default language for speech recognition
     const [textOutput, setTextOutput] = useState(''); // The recognized text from speech
     const [isLoading, setIsLoading] = useState(false); // Loading state for async operations
     const [audioSrc, setAudioSrc] = useState(''); // Store the audio source URL or blob
+    const [audioData, setAudioData] = useState(null); // Store the audio data blob
 
     // Handles the submission of audio data for recognition
-    const handleAudioSubmit = useCallback(async (audioData) => {
+    const handleAudioSubmit = useCallback(async () => {
+        if (!audioData) return;
+
         setIsLoading(true);
         try {
             const transcript = await recognizeSpeech(audioData, language, language); // Process the audio to text
             console.log("Transcription: " + transcript);
             console.log("Language: " + language);
             setAudioSrc(URL.createObjectURL(audioData)); // Assuming audioData is a Blob
-           
+
             setTextOutput(transcript);
         } catch (e) {
             console.log(e);
             setTextOutput('');
         }
         setIsLoading(false);
-    }, [language]);
+    }, [audioData, language]);
+
+    const handleAudioLoad = useCallback((audioData) => {
+        setAudioData(audioData);
+        setAudioSrc(URL.createObjectURL(audioData));
+    }, []);
 
     const onLanguageChange = (event) => {
         setLanguage(event.target.value);
-    }    
+    };
 
     useEffect(() => {
         console.log("Language updated to: " + language);
-    }, [language]);    
-
-    // Optional: Handler for copying text to clipboard
-    const handleCopyToClipboard = useCallback(async () => {
-        if (textOutput) {
-            await navigator.clipboard.writeText(textOutput);
-        }
-    }, [textOutput]);
-
-    // Optional: Handler for providing feedback
-    const handleProvideFeedback = useCallback((feedback) => {
-        console.log(feedback);
-    }, []);
+    }, [language]);
 
     return (
         <MainContainer>
-            <div className={"bg-white shadow"}>
-            <LanguageDropdown onChange={onLanguageChange}>
-                {sourceOptions.map((option, index) =>
-                    <option key={index} value={option.value}>{option.label}</option>
-                )}
-            </LanguageDropdown>
-                <AudioInput
-                    onAudioSubmit={handleAudioSubmit}
-                    setLanguage={setLanguage}
-                    isLoading={isLoading}
-                />
-                <AudioPlayer audioSrc={audioSrc} style={{ padding: '10px' }} />
-            </div>
+            <ResponsiveContainer>
+                <div className="step-container">
+                    <h2>Step 1: Upload or Record Your Audio</h2>
+                    <AudioInput
+                        onAudioSubmit={handleAudioLoad}
+                        isLoading={isLoading}
+                    />
+                </div>
+
+                <div className="step-container">
+                    <h2>Step 2: Select the Language of the Audio</h2>
+                    <LanguageDropdown onChange={onLanguageChange}>
+                        {sourceOptions.map((option, index) =>
+                            <option key={index} value={option.value}>{option.label}</option>
+                        )}
+                    </LanguageDropdown>
+                </div>
+
+                <div className="step-container">
+                    <h2>Step 3: Transcribe the Audio</h2>
+                    <ButtonContainer>
+                        <Button variant="contained" color="primary" onClick={handleAudioSubmit} disabled={!audioData || isLoading}>
+                            Transcribe
+                        </Button>
+                    </ButtonContainer>
+                </div>
+            </ResponsiveContainer>
             <TranscriptionTextArea
                 placeholder="Recognized text will appear here"
                 text={textOutput}
-                setText={setTextOutput} 
+                setText={setTextOutput}
                 isLoading={isLoading}
-                onCopyToClipboard={handleCopyToClipboard}
-                onProvideFeedback={handleProvideFeedback}
             />
-            {/* <SamplePhrases sourceLanguage={language} setSamplePhrase={setTextOutput}/> */}
+            <Footer audioSrc={audioSrc} />
         </MainContainer>
     );
 };
-
-const AudioPlayer = ({ audioSrc }) => {
-    if (!audioSrc) {
-        return null;
-    }
-
-    return (
-        <audio controls src={audioSrc}>
-            Your browser does not support the audio element.
-        </audio>
-    );
-};
-
 
 export default Transcription;

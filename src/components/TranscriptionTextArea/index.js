@@ -1,4 +1,4 @@
-import { TextArea } from "./TranscriptionTextArea.styles";
+import { TextArea, ResponsiveContainer, ButtonContainer } from "./TranscriptionTextArea.styles";
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -12,8 +12,6 @@ const TranscriptionTextArea = ({
     text, // This will be the recognized text from audio
     setText, // Function to update the recognized text
     isLoading,
-    onCopyToClipboard, // Function to handle copying text
-    onProvideFeedback, // Optional, for user to give feedback on the recognition accuracy
 }) => {
     const [copySuccess, setCopySuccess] = useState(false);
 
@@ -28,7 +26,7 @@ const TranscriptionTextArea = ({
     }
 
     return (
-        <div className="bg-white shadow" style={{ position: 'relative', height: '100%' }}>
+        <ResponsiveContainer>
             <TextArea
                 placeholder={placeholder}
                 readOnly={true}
@@ -36,31 +34,25 @@ const TranscriptionTextArea = ({
                 onChange={(e) => setText(e.target.value)}
                 className="text-area-class"
             />
-            {isLoading && <LinearProgress color="secondary"/>}
-            <Button
-                onClick={copyToClipboard}
-                disabled={!text}
-                endIcon={<ContentCopy />}
-                size="small"
-                style={{
-                    position: 'absolute',
-                    right: '20px',
-                    bottom: '20px',
-                }}
-            >
-                Copy
-            </Button>
-            {/* {text && <Feedback
-                text={text}
-                onProvideFeedback={onProvideFeedback}
-            />} */}
+            {isLoading && <LinearProgress color="secondary" />}
+            <ButtonContainer>
+                <Button
+                    onClick={copyToClipboard}
+                    disabled={!text}
+                    endIcon={<ContentCopy />}
+                    size="small"
+                >
+                    Copy
+                </Button>
+            </ButtonContainer>
+
             <Snackbar
                 open={copySuccess}
                 autoHideDuration={3000}
                 message="Text copied!"
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             />
-        </div>
+        </ResponsiveContainer>
     );
 };
 
