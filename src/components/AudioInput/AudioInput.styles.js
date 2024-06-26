@@ -3,12 +3,13 @@ import tw, { styled } from 'twin.macro';
 export const Container = styled.div`
   ${tw`
     flex
-    justify-between
     items-center
+    justify-between
     p-10
     w-full
   `}
 `;
+
 
 export const DropZoneContainer = styled.div`
   ${tw`
@@ -38,7 +39,7 @@ export const DropZoneContainer = styled.div`
     color: #000;
   }
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-size: 1.5vw; /* 1.25% of the viewport width */
+  font-size: 2.0vw; /* 1.25% of the viewport width */
 `;
 
 export const RecordingArea = styled.div`
@@ -47,7 +48,6 @@ export const RecordingArea = styled.div`
     flex-col
     items-center
     justify-center
-    ml-8
   `}
 `;
 
@@ -60,3 +60,8 @@ export const LoadingContainer = styled.div`
     h-full
   `}
 `;
+
+export const VerticalDottedLine = styled.div`
+  ${tw`w-0 h-full bg-transparent border-l-2 border-dotted border-gray-900 my-4 mx-4`}
+`;
+

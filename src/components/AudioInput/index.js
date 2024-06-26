@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import SvgIcon from '@mui/material/SvgIcon';
 import { TailSpin } from 'react-loader-spinner';
-import { Container, DropZoneContainer, RecordingArea, LoadingContainer } from './AudioInput.styles';
+import { Container, DropZoneContainer, RecordingArea, LoadingContainer, VerticalDottedLine } from './AudioInput.styles';
 
 const AudioInput = ({ onAudioSubmit, isLoading }) => {
     const [dragActive, setDragActive] = useState(false);
@@ -107,6 +107,7 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
                     "Drag and drop your audio file here or click to select a file."
                 )}
             </DropZoneContainer>
+            <VerticalDottedLine/>
             <RecordingArea>
                 <Button
                     variant="contained"
