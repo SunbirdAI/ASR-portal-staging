@@ -49,6 +49,9 @@ export const LanguageDropdown = styled.select`
 
 export const ResponsiveContainer = styled.div`
   ${tw`flex flex-col items-center justify-center w-full p-4 bg-white shadow-md rounded-lg`}
+  h3 {
+    ${tw`text-center w-full`} // Ensures that the heading is always centered
+  }
   @media (min-width: 768px) {
     ${tw`flex-col justify-start items-start p-6`}
   }
