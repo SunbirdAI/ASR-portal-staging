@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { MainContainer, LanguageDropdown, ResponsiveContainer, ButtonContainer } from "./Transcription.styles";
+import { DynamicMainContainer, MainContainer, LanguageDropdown, ResponsiveContainer, ButtonContainer } from "./Transcription.styles";
 import AudioInput from '../AudioInput'; // Adjust based on actual file structure
 import TranscriptionTextArea from '../TranscriptionTextArea';
 import Button from '@mui/material/Button';
@@ -39,6 +39,17 @@ const Transcription = () => {
     const [isLoading, setIsLoading] = useState(false); // Loading state for async operations
     const [audioSrc, setAudioSrc] = useState(''); // Store the audio source URL or blob
     const [audioData, setAudioData] = useState(null); // Store the audio data blob
+    const [copySuccess, setCopySuccess] = useState(false);
+
+    const copyToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(textOutput);
+            setCopySuccess(true);
+            setTimeout(() => setCopySuccess(false), 3000);
+        } catch (err) {
+            console.error('Failed to copy!', err);
+        }
+    }
 
     // Handles the submission of audio data for recognition
     const handleAudioSubmit = useCallback(async () => {
@@ -73,42 +84,34 @@ const Transcription = () => {
     }, [language]);
 
     return (
-        <MainContainer>
+        <DynamicMainContainer hasFooter={!!audioData}>
             <ResponsiveContainer>
-                <div className="step-container">
-                    <h2>Step 1: Upload or Record Your Audio</h2>
-                    <AudioInput
-                        onAudioSubmit={handleAudioLoad}
-                        isLoading={isLoading}
-                    />
-                </div>
+                <h3>Step 1: Upload or Record Your Audio</h3>
+                <AudioInput onAudioSubmit={handleAudioLoad} isLoading={isLoading} />
 
-                <div className="step-container">
-                    <h2>Step 2: Select the Language of the Audio</h2>
-                    <LanguageDropdown onChange={onLanguageChange}>
-                        {sourceOptions.map((option, index) =>
-                            <option key={index} value={option.value}>{option.label}</option>
-                        )}
-                    </LanguageDropdown>
-                </div>
+                <h3>Step 2: Select the Language of the Audio</h3>
+                <LanguageDropdown onChange={onLanguageChange}>
+                    {sourceOptions.map((option, index) =>
+                        <option key={index} value={option.value}>{option.label}</option>
+                    )}
+                </LanguageDropdown>
 
-                <div className="step-container">
-                    <h2>Step 3: Transcribe the Audio</h2>
-                    <ButtonContainer>
-                        <Button variant="contained" color="primary" onClick={handleAudioSubmit} disabled={!audioData || isLoading}>
-                            Transcribe
-                        </Button>
-                    </ButtonContainer>
-                </div>
+                <h3>Step 3: Transcribe the Audio</h3>
+                <ButtonContainer>
+                    <Button variant="contained" color="primary" onClick={handleAudioSubmit} disabled={!audioData || isLoading}>
+                        Transcribe
+                    </Button>
+                </ButtonContainer>
             </ResponsiveContainer>
+
             <TranscriptionTextArea
                 placeholder="Recognized text will appear here"
                 text={textOutput}
                 setText={setTextOutput}
                 isLoading={isLoading}
             />
-            <Footer audioSrc={audioSrc} />
-        </MainContainer>
+            {audioData && <Footer audioSrc={audioSrc} text={textOutput} copyToClipboard={copyToClipboard} copySuccess={copySuccess} ></Footer>}
+        </DynamicMainContainer>
     );
 };
 

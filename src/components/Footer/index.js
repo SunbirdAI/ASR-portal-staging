@@ -1,12 +1,31 @@
 import React from 'react';
-import { Nav, AudioPlayerContainer } from './Footer.styles';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import { FooterContainer, AudioPlayerContainer, ButtonContainer, TextNav } from './Footer.styles';
 
-const Footer = ({ audioSrc }) => (
-    <Nav>
+const Footer = ({ audioSrc, text, copyToClipboard, copySuccess }) => (
+    <FooterContainer>
         <AudioPlayerContainer>
             <AudioPlayer audioSrc={audioSrc} />
         </AudioPlayerContainer>
-    </Nav>
+        <ButtonContainer>
+            <Button
+                onClick={copyToClipboard}
+                disabled={!text}
+                endIcon={<ContentCopy />}
+                size="small"
+            >
+                <TextNav>Copy Text</TextNav>
+            </Button>
+        </ButtonContainer>
+        <Snackbar
+            open={copySuccess}
+            autoHideDuration={3000}
+            message="Text copied!"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        />
+    </FooterContainer>
 );
 
 const AudioPlayer = ({ audioSrc }) => {

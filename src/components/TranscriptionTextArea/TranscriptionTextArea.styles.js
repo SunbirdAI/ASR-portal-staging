@@ -4,23 +4,24 @@ export const TextArea = styled.textarea`
    ${tw`
     w-full
     h-full
-    p-3
-    text-2xl md:text-4xl
+    relative
+    p-4  // Smaller base padding
     text-gray-700
     rounded
     transition
-    placeholder:text-4xl
+    shadow-lg
+    rounded-lg
     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
   `}
-`;
 
-export const ResponsiveContainer = styled.div`
-  ${tw`relative p-4 bg-white shadow-lg rounded-lg`}
-`;
-
-export const ButtonContainer = styled.div`
-  ${tw`absolute right-4 bottom-4`}
-  @media (max-width: 640px) {
-    ${tw`relative mt-4`}
+  font-size: 16px; // Base font size for larger screens
+  @media (max-width: 768px) {
+    font-size: 14px; // Smaller font size for tablets
+    padding: 3rem;  // Slightly smaller padding
+  }
+  @media (max-width: 480px) {
+    font-size: 12px; // Even smaller font size for mobile phones
+    padding: 2rem;  // Minimal padding to increase space
+    height: 200px; // Fixed smaller height for very small devices
   }
 `;

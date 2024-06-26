@@ -17,7 +17,6 @@ export const DropZoneContainer = styled.div`
     justify-center
     items-center
     p-6
-    text-lg
     text-gray-700
     border-2
     border-dashed
@@ -39,6 +38,7 @@ export const DropZoneContainer = styled.div`
     color: #000;
   }
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1.5vw; /* 1.25% of the viewport width */
 `;
 
 export const RecordingArea = styled.div`
