@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { getSingleTranscript, updateTranscript } from "../../API";
 
-const ViewTranscript = () => {
+const View = () => {
     const [edit, setEdit] = useState(false)
     const [transcriptData, setTranscriptData] = useState(null)
     const [newTranscript, setNewTranscript] = useState("")
@@ -127,4 +127,4 @@ const ViewTranscript = () => {
     </>
 }
 
-export default ViewTranscript;
+export default View;

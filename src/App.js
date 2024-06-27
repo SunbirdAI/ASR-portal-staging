@@ -6,8 +6,8 @@ import Transcription from "./components/Transcription";
 import { useEffect } from "react";
 import { tracking_id } from "./API";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Files from "./components/Files";
 import View from "./components/View";
+import Files from "./components/Files";
 
 
 
