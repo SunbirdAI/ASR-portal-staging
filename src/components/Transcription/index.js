@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { DynamicMainContainer, MainContainer, LanguageDropdown, ResponsiveContainer, ButtonContainer } from "./Transcription.styles";
+import { DynamicMainContainer, LanguageDropdown, ResponsiveContainer, ButtonContainer } from "./Transcription.styles";
 import AudioInput from '../AudioInput'; // Adjust based on actual file structure
 import TranscriptionTextArea from '../TranscriptionTextArea';
 import Button from '@mui/material/Button';

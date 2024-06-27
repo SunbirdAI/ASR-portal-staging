@@ -104,7 +104,7 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
                         />
                     </LoadingContainer>
                 ) : (
-                    "Drag and drop your audio file here or click to select a file."
+                    "click or drop your audio file here."
                 )}
             </DropZoneContainer>
             <VerticalDottedLine/>
@@ -115,10 +115,10 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
                     disabled={isLoading}
                     onClick={toggleRecording}
                     sx={{
-                        borderRadius: '50%',
-                        height: 56,
-                        width: 56,
-                        minWidth: 56,
+                        borderRadius: '40%',
+                        height: 46,
+                        width: 46,
+                        minWidth: 46,
                         padding: '10px',
                         mt: 2,
                         '& .MuiButton-startIcon': {
