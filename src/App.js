@@ -5,17 +5,16 @@ import Header from "./components/Header";
 import Transcription from "./components/Transcription";
 import { useEffect } from "react";
 import { tracking_id } from "./API";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import View from "./components/View";
 import Files from "./components/Files";
-
-
 
 function App() {
     useEffect(() => {
         ReactGA.initialize(tracking_id);
         ReactGA.send("pageview");
     }, []);
+
     return (
         <Router>
             <div className="h-screen">
@@ -27,7 +26,6 @@ function App() {
                 </Routes>
             </div>
         </Router>
-
     );
 }
 
