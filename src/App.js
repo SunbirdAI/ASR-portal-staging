@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import Transcription from "./components/Transcription";
 import { useEffect } from "react";
 import { tracking_id } from "./API";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import View from "./components/View";
 import Files from "./components/Files";
 import SignUpForm from "./components/Auth/SignUp";
