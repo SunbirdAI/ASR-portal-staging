@@ -48,6 +48,7 @@ const SignInForm = () => {
         if (data?.success) {
           setSuccess(data?.success);
           navigate('/')
+          window.location.reload() // To be removed after implementing AuthContext
         }
 
         if (data?.error) {
@@ -112,7 +113,7 @@ const SignInForm = () => {
             )}
           />
           <div className="w-full mb-7">
-            <NavLink to="#" className="text-sm font-medium hover:underline hover:text-sunbird-orange ease-out duration-[0.3s]" >Forgot Password?</NavLink>
+            <NavLink to="#" className="text-sm font-medium hover:underline hover:opacity-90 text-sunbird-orange ease-out duration-[0.3s]" >Forgot Password?</NavLink>
           </div>
 
           
