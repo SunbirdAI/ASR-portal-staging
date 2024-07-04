@@ -16,6 +16,8 @@ import { FormError, FormSuccess } from "../AuthFormMessage";
 import AuthCard from "../AuthWrapper";
 import { Loader2 } from "lucide-react";
 import { registerNewAccount } from "../../../API";
+import { AuthSubmitButton } from "../Auth.styles";
+import { TrackGoogleAnalyticsEvent } from "../../../lib/GoogleAnalyticsUtil";
 
 const SignUpSchema = z
   .object({
@@ -59,11 +61,21 @@ const SignUpForm = () => {
     setError("");
     setSuccess("");
     setPending(true);
+    TrackGoogleAnalyticsEvent(
+      "Form Submission",
+      "Submitted Sign Up Form",
+      "Sign Up Button"
+    );
 
     await registerNewAccount(values)
       .then((data) => {
         if (data?.success) {
           setSuccess(data?.success);
+          TrackGoogleAnalyticsEvent(
+            "Form Submission",
+            "New User Created",
+            "Sign Up Button"
+          );
         }
 
         if (data?.error) {
@@ -117,7 +129,7 @@ const SignUpForm = () => {
                   <Input
                     placeholder="Enter a username"
                     {...field}
-                    disabled={pending}  
+                    disabled={pending}
                   />
                 </FormControl>
                 <FormMessage />
@@ -135,7 +147,7 @@ const SignUpForm = () => {
                   <Input
                     placeholder="Enter your organization "
                     {...field}
-                    disabled={pending} 
+                    disabled={pending}
                   />
                 </FormControl>
                 <FormMessage />
@@ -181,12 +193,9 @@ const SignUpForm = () => {
             )}
           />
 
-          <button
-            className="w-full h-12 outline-none flex items-center justify-center rounded-md text-base font-semibold mb-7 border-2 border-transparent bg-sunbird-orange text-white hover:bg-opacity-90 transition-all ease-out duration-[0.3s]"
-            disabled={pending}
-          >
+          <AuthSubmitButton type="submit" disabled={pending}>
             {pending ? <Loader2 className="animate-spin" /> : "Sign Up"}
-          </button>
+          </AuthSubmitButton>
         </form>
       </Form>
     </AuthCard>
