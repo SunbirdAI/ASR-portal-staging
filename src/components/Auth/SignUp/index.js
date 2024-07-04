@@ -18,12 +18,13 @@ import { Loader2 } from "lucide-react";
 import { registerNewAccount } from "../../../API";
 import { AuthSubmitButton } from "../Auth.styles";
 import { TrackGoogleAnalyticsEvent } from "../../../lib/GoogleAnalyticsUtil";
+import { useNavigate } from "react-router-dom";
 
 const SignUpSchema = z
   .object({
     email: z.string().min(1, "Email is required").email("Invalid email"),
     name: z.string().min(1, "Username is required").max(100),
-    organisation: z.string().min(1, "Organisation is required").max(100),
+    organisation: z.optional(z.string()),
     password: z
       .string()
       .min(1, "Password is required")
@@ -45,7 +46,7 @@ const SignUpForm = () => {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -76,6 +77,7 @@ const SignUpForm = () => {
             "New User Created",
             "Sign Up Button"
           );
+          navigate("/login");
         }
 
         if (data?.error) {

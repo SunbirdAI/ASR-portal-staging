@@ -17,12 +17,12 @@ import AuthCard from "../AuthWrapper";
 import { Loader2 } from "lucide-react";
 import { loginIntoAccount } from "../../../API";
 import { NavLink, useNavigate } from "react-router-dom";
+import { AuthSubmitButton } from "../Auth.styles";
 
-const SignInSchema = z
-  .object({
-    username: z.string(),
-    password: z.string(),
-  });
+const SignInSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
 
 const SignInForm = () => {
   const navigate = useNavigate();
@@ -47,8 +47,8 @@ const SignInForm = () => {
       .then((data) => {
         if (data?.success) {
           setSuccess(data?.success);
-          navigate('/')
-          window.location.reload() // To be removed after implementing AuthContext
+          navigate("/");
+          window.location.reload(); // To be removed after implementing AuthContext
         }
 
         if (data?.error) {
@@ -74,7 +74,6 @@ const SignInForm = () => {
           <FormSuccess message={success} />
           <FormError message={error} />
 
-          
           <FormField
             control={form.control}
             name="username"
@@ -85,7 +84,7 @@ const SignInForm = () => {
                   <Input
                     placeholder="Enter a username"
                     {...field}
-                    disabled={pending}  
+                    disabled={pending}
                   />
                 </FormControl>
                 <FormMessage />
@@ -93,7 +92,6 @@ const SignInForm = () => {
             )}
           />
 
-          
           <FormField
             control={form.control}
             name="password"
@@ -113,16 +111,17 @@ const SignInForm = () => {
             )}
           />
           <div className="w-full mb-7">
-            <NavLink to="#" className="text-sm font-medium hover:underline hover:opacity-90 text-sunbird-orange ease-out duration-[0.3s]" >Forgot Password?</NavLink>
+            <NavLink
+              to="#"
+              className="text-sm font-medium hover:underline hover:opacity-90 text-sunbird-orange ease-out duration-[0.3s]"
+            >
+              Forgot Password?
+            </NavLink>
           </div>
 
-          
-          <button
-            className="w-full h-12 outline-none flex items-center justify-center rounded-md text-base font-semibold mb-7 border-2 border-transparent bg-sunbird-orange text-white hover:bg-opacity-90 transition-all ease-out duration-[0.3s]"
-            disabled={pending}
-          >
+          <AuthSubmitButton type="submit" disabled={pending}>
             {pending ? <Loader2 className="animate-spin" /> : "Sign In"}
-          </button>
+          </AuthSubmitButton>
         </form>
       </Form>
     </AuthCard>
