@@ -9,8 +9,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../UI/Form";
-import { Input } from "../../UI/Input";
+} from "../../Form";
+import { Input } from "../../Input";
 import { FormError, FormSuccess } from "../AuthFormMessage";
 
 import AuthCard from "../AuthWrapper";
