@@ -7,7 +7,7 @@ import ReactGA from "react-ga4";
 
 const root = createRoot(document.getElementById("root"));
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.REACT_APP_NODE_ENV === "Production") {
   ReactGA.initialize(`${process.env.REACT_APP_GA4_MEASUREMENT_ID}`, {
     gaOptions: {
       anonymizeIp: true,
