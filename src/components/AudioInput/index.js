@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import SvgIcon from '@mui/material/SvgIcon';
 import { TailSpin } from 'react-loader-spinner';
+import Swal from 'sweetalert2';
 import { Container, DropZoneContainer, RecordingArea, LoadingContainer, VerticalDottedLine } from './AudioInput.styles';
 
 const AudioInput = ({ onAudioSubmit, isLoading }) => {
@@ -63,7 +64,30 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file && file.type.startsWith('audio/')) {
-            onAudioSubmit(file);
+            if (file.size > 15 * 1024 * 1024) {
+                // alert("File size exceeds 15MB. Please contact the Sunbird team for support.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File Too Large',
+                    text: 'The file you are trying to upload exceeds the maximum allowable size of 15MB. For larger file and longer audio support, please contact the Sunbird team at info@sunbird.ai.',
+                });
+                return;
+            }
+
+            const audio = new Audio(URL.createObjectURL(file));
+            audio.onloadedmetadata = () => {
+                if (audio.duration > 15 * 60) {
+                    // alert("Audio duration exceeds 15 minutes. Please contact the Sunbird team for support.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Audio Too Long',
+                        text: 'The file you are trying to upload exceeds the maximum allowable Audio duration of 15 minutes. For larger file and longer audio support, please contact the Sunbird team at info@sunbird.ai.',
+                    });
+                } else {
+                    onAudioSubmit(file);
+                }
+            }
+            // onAudioSubmit(file);
         }
     };
 
