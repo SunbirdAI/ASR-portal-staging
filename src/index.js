@@ -4,6 +4,12 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import ReactGA from "react-ga4";
+import Hotjar from '@hotjar/browser';
+
+const siteId = 5091559;
+const hotjarVersion = 6;
+
+Hotjar.init(siteId, hotjarVersion);
 
 const root = createRoot(document.getElementById("root"));
 

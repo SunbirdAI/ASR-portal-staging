@@ -6,7 +6,6 @@ export const tracking_id = process.env.REACT_APP_GA4_TRACKING_ID;
 export const token = localStorage.getItem("access_token")
   ? localStorage.getItem("access_token")
   : process.env.REACT_APP_SB_API_TOKEN;
-console.log(`Current Token: ${token}`);
 
 const asrUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/stt`;
 
