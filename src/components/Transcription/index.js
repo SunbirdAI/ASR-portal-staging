@@ -114,12 +114,16 @@ const Transcription = () => {
 
   return (
     <>
+
       {showNote && (
-        <Note>
-          Note: Audio files used here are saved for the purpose of system improvement and model retraining.
-          <CloseButton onClick={() => setShowNote(false)}>✖</CloseButton>
-        </Note>
+        <div>
+          <Note>
+            Note: Audio files used here are saved for the purpose of system improvement and model retraining.
+            <CloseButton onClick={() => setShowNote(false)}>✖</CloseButton>
+          </Note>
+        </div>
       )}
+
       <DynamicMainContainer hasFooter={!!audioData}>
         <ResponsiveContainer>
           <h3>Step 1: Upload or Record Your Audio</h3>
