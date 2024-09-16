@@ -41,7 +41,7 @@ const DataTable = ({ transcriptData }) => {
             indexOfLastItem >= transformedData.length ? setIsLastPage(true) : setIsLastPage(false)
         };
         paginate();
-    }, [currentPage, itemsPerPage, searchQuery]);
+    }, [currentPage, itemsPerPage, searchQuery, transformedData]);
 
     const handleItemsPerPageChange = (event) => {
         setItemsPerPage(Number(event.target.value));
