@@ -4,7 +4,7 @@ module.exports = defineConfig({
   chromeWebSecurity: false,
 
   e2e: {
-    baseUrl: "http://localhost:3000",
+    baseUrl: "https://speech.sunbird.ai",
     env: {
       localUrl: "http://localhost:3000",
       productionUrl: "https://speech.sunbird.ai",
