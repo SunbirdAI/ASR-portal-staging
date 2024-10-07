@@ -11,7 +11,36 @@ const asrUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/stt`;
 
 const asrDbUrl = `${process.env.REACT_APP_SB_API_URL}/transcriptions`;
 
+const autoDetectUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/auto_detect_audio_language`;
+
 // const textToSpeechUrl = "https://api-inference.huggingface.co/models/Sunbird/sunbird-lug-tts";
+
+// API.js
+export async function detectAudioLanguage(audioData) {
+  const formData = new FormData();
+  formData.append("audio", audioData);
+
+  try {
+    const response = await fetch(autoDetectUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;  // Ensure the response contains the detected language code
+  } catch (error) {
+    console.error("Error detecting language:", error);
+    throw error;
+  }
+}
 
 /**
  * Recognizes speech from an audio file and returns the transcribed text.

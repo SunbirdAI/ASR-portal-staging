@@ -7,46 +7,30 @@ import {
   Note,
   CloseButton,
 } from "./Transcription.styles";
-import AudioInput from "../AudioInput"; // Adjust based on actual file structure
+import AudioInput from "../AudioInput";
 import TranscriptionTextArea from "../TranscriptionTextArea";
 import Button from "@mui/material/Button";
-import { recognizeSpeech } from "../../API"; // Function to convert speech to text
+import { recognizeSpeech } from "../../API";
 import Footer from "../Footer";
 import { TrackGoogleAnalyticsEvent } from "../../lib/GoogleAnalyticsUtil";
+import { detectAudioLanguage } from "../../API"; // Import your detectAudioLanguage function
 
 const sourceOptions = [
-  {
-    label: "Luganda",
-    value: "lug",
-  },
-  {
-    label: "Acholi",
-    value: "ach",
-  },
-  {
-    label: "Ateso",
-    value: "teo",
-  },
-  {
-    label: "Lugbara",
-    value: "lgg",
-  },
-  {
-    label: "Runyankole",
-    value: "nyn",
-  },
-  {
-    label: "English",
-    value: "eng",
-  },
+  { label: "Luganda", value: "lug" },
+  { label: "Acholi", value: "ach" },
+  { label: "Ateso", value: "teo" },
+  { label: "Lugbara", value: "lgg" },
+  { label: "Runyankole", value: "nyn" },
+  { label: "English", value: "eng" },
 ];
 
 const Transcription = () => {
-  const [language, setLanguage] = useState("lug"); // Default language for speech recognition
-  const [textOutput, setTextOutput] = useState(""); // The recognized text from speech
-  const [isLoading, setIsLoading] = useState(false); // Loading state for async operations
-  const [audioSrc, setAudioSrc] = useState(""); // Store the audio source URL or blob
-  const [audioData, setAudioData] = useState(null); // Store the audio data blob
+  const [language, setLanguage] = useState("lug"); // Default language
+  const [autoDetectedLanguage, setAutoDetectedLanguage] = useState(""); // To store auto-detected language
+  const [textOutput, setTextOutput] = useState(""); // Transcription text
+  const [isLoading, setIsLoading] = useState(false);
+  const [audioSrc, setAudioSrc] = useState(""); // Store the audio URL
+  const [audioData, setAudioData] = useState(null); // Store audio file
   const [copySuccess, setCopySuccess] = useState(false);
   const [showNote, setShowNote] = useState(true);
 
@@ -60,7 +44,6 @@ const Transcription = () => {
     }
   };
 
-  // Handles the submission of audio data for recognition
   const handleAudioSubmit = useCallback(async () => {
     if (!audioData) return;
 
@@ -71,10 +54,8 @@ const Transcription = () => {
     );
     setIsLoading(true);
     try {
-      const transcript = await recognizeSpeech(audioData, language, language); // Process the audio to text
-      console.log("Transcription: " + transcript);
-      console.log("Language: " + language);
-      setAudioSrc(URL.createObjectURL(audioData)); // Assuming audioData is a Blob
+      const transcript = await recognizeSpeech(audioData, language, language);
+      setAudioSrc(URL.createObjectURL(audioData));
 
       if (transcript.audio_transcription) {
         TrackGoogleAnalyticsEvent(
@@ -85,19 +66,32 @@ const Transcription = () => {
       }
       setTextOutput(transcript.audio_transcription);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       setTextOutput("");
     }
     setIsLoading(false);
   }, [audioData, language]);
 
-  const handleAudioLoad = useCallback((audioData) => {
+  const handleAudioLoad = useCallback(async (audioData) => {
     setAudioData(audioData);
     setAudioSrc(URL.createObjectURL(audioData));
+
+    // Auto-detect language on audio load
+    try {
+      const detectedLanguageResponse = await detectAudioLanguage(audioData);
+      if (detectedLanguageResponse && detectedLanguageResponse.detected_language) {
+        const detectedLanguage = detectedLanguageResponse.detected_language;
+        setAutoDetectedLanguage(detectedLanguage); // Store detected language
+        setLanguage(detectedLanguage); // Set the language for transcription
+        console.log("Auto-detected language:", detectedLanguage);
+      }
+    } catch (error) {
+      console.error("Error detecting audio language:", error);
+    }
   }, []);
 
   const onLanguageChange = (event) => {
-    setLanguage(event.target.value);
+    setLanguage(event.target.value); // Update state with user's manual selection
   };
 
   useEffect(() => {
@@ -107,14 +101,13 @@ const Transcription = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowNote(false);
-    }, 6000); // Hide the note after 10 seconds
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-
       {showNote && (
         <div>
           <Note>
@@ -129,8 +122,8 @@ const Transcription = () => {
           <h3>Step 1: Upload or Record Your Audio</h3>
           <AudioInput onAudioSubmit={handleAudioLoad} isLoading={isLoading} />
 
-          <h3>Step 2: Select the Language of the Audio</h3>
-          <LanguageDropdown onChange={onLanguageChange}>
+          <h3>Step 2: Auto-Detected Language: {autoDetectedLanguage || "N/A"}</h3>
+          <LanguageDropdown value={language} onChange={onLanguageChange}>
             {sourceOptions.map((option, index) => (
               <option key={index} value={option.value}>
                 {option.label}
@@ -157,13 +150,14 @@ const Transcription = () => {
           setText={setTextOutput}
           isLoading={isLoading}
         />
+
         {audioData && (
           <Footer
             audioSrc={audioSrc}
             text={textOutput}
             copyToClipboard={copyToClipboard}
             copySuccess={copySuccess}
-          ></Footer>
+          />
         )}
       </DynamicMainContainer>
     </>
