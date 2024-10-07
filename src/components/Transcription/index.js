@@ -13,7 +13,8 @@ import Button from "@mui/material/Button";
 import { recognizeSpeech } from "../../API";
 import Footer from "../Footer";
 import { TrackGoogleAnalyticsEvent } from "../../lib/GoogleAnalyticsUtil";
-import { detectAudioLanguage } from "../../API"; // Import your detectAudioLanguage function
+import { detectAudioLanguage } from "../../API"; // Import the detectAudioLanguage function
+import Loading from 'react-fullscreen-loading'; // Import Fullscreen Loading
 
 const sourceOptions = [
   { label: "Luganda", value: "lug" },
@@ -26,13 +27,15 @@ const sourceOptions = [
 
 const Transcription = () => {
   const [language, setLanguage] = useState("lug"); // Default language
-  const [autoDetectedLanguage, setAutoDetectedLanguage] = useState(""); // To store auto-detected language
-  const [textOutput, setTextOutput] = useState(""); // Transcription text
+  const [autoDetectedLanguage, setAutoDetectedLanguage] = useState(""); // Store auto-detected language
+  const [textOutput, setTextOutput] = useState(""); // Store the transcription text
   const [isLoading, setIsLoading] = useState(false);
   const [audioSrc, setAudioSrc] = useState(""); // Store the audio URL
-  const [audioData, setAudioData] = useState(null); // Store audio file
+  const [audioData, setAudioData] = useState(null); // Store the audio file
   const [copySuccess, setCopySuccess] = useState(false);
   const [showNote, setShowNote] = useState(true);
+  const [detectingLanguage, setDetectingLanguage] = useState(false); // State for language detection
+  const [detectionError, setDetectionError] = useState(null); // Error handling state
 
   const copyToClipboard = async () => {
     try {
@@ -75,23 +78,27 @@ const Transcription = () => {
   const handleAudioLoad = useCallback(async (audioData) => {
     setAudioData(audioData);
     setAudioSrc(URL.createObjectURL(audioData));
+    setDetectingLanguage(true); // Show full-screen loading during detection
+    setDetectionError(null); // Clear any previous errors
 
-    // Auto-detect language on audio load
     try {
       const detectedLanguageResponse = await detectAudioLanguage(audioData);
       if (detectedLanguageResponse && detectedLanguageResponse.detected_language) {
         const detectedLanguage = detectedLanguageResponse.detected_language;
         setAutoDetectedLanguage(detectedLanguage); // Store detected language
-        setLanguage(detectedLanguage); // Set the language for transcription
+        setLanguage(detectedLanguage); // Set the detected language
         console.log("Auto-detected language:", detectedLanguage);
       }
     } catch (error) {
       console.error("Error detecting audio language:", error);
+      setDetectionError("Failed to detect language. Please select manually.");
+    } finally {
+      setDetectingLanguage(false); // Hide full-screen loading when detection ends
     }
   }, []);
 
   const onLanguageChange = (event) => {
-    setLanguage(event.target.value); // Update state with user's manual selection
+    setLanguage(event.target.value);
   };
 
   useEffect(() => {
@@ -108,6 +115,15 @@ const Transcription = () => {
 
   return (
     <>
+      {/* Full-Screen Loading */}
+      {detectingLanguage && (
+        <Loading
+          loading={detectingLanguage} // Will show the loader when true
+          background="transparent" // Background color for loading screen
+          loaderColor="#3498db" // Color of the spinner
+        />
+      )}
+
       {showNote && (
         <div>
           <Note>
@@ -122,7 +138,15 @@ const Transcription = () => {
           <h3>Step 1: Upload or Record Your Audio</h3>
           <AudioInput onAudioSubmit={handleAudioLoad} isLoading={isLoading} />
 
-          <h3>Step 2: Auto-Detected Language: {autoDetectedLanguage || "N/A"}</h3>
+          <h3>Step 2: 
+          {detectionError ? (
+            <p style={{ color: "red" }}>{detectionError}</p> // Show error message if detection fails
+          ) : (
+            <p>Auto-Detected Language: {autoDetectedLanguage || "N/A"}</p>
+          )}
+          </h3>
+
+          {/* Language dropdown still available for manual selection */}
           <LanguageDropdown value={language} onChange={onLanguageChange}>
             {sourceOptions.map((option, index) => (
               <option key={index} value={option.value}>
