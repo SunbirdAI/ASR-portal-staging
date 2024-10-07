@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/ASR-portal-staging/static/css/main.2903a10f.css",
-    "main.js": "/ASR-portal-staging/static/js/main.18736bf6.js",
+    "main.js": "/ASR-portal-staging/static/js/main.d74812c1.js",
     "static/js/488.aeced2cd.chunk.js": "/ASR-portal-staging/static/js/488.aeced2cd.chunk.js",
     "static/media/logo1.png": "/ASR-portal-staging/static/media/logo1.86619bfd7533e9660e9d.png",
     "static/media/logo.png": "/ASR-portal-staging/static/media/logo.dc5aaf679600533f0825.png",
     "index.html": "/ASR-portal-staging/index.html",
     "main.2903a10f.css.map": "/ASR-portal-staging/static/css/main.2903a10f.css.map",
-    "main.18736bf6.js.map": "/ASR-portal-staging/static/js/main.18736bf6.js.map",
+    "main.d74812c1.js.map": "/ASR-portal-staging/static/js/main.d74812c1.js.map",
     "488.aeced2cd.chunk.js.map": "/ASR-portal-staging/static/js/488.aeced2cd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2903a10f.css",
-    "static/js/main.18736bf6.js"
+    "static/js/main.d74812c1.js"
   ]
 }
