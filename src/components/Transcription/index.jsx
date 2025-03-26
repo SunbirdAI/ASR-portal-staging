@@ -6,11 +6,14 @@ import {
   ButtonContainer,
   Note,
   CloseButton,
+  FeedbackContainer,
+  RatingStars,
+  FeedbackTextarea
 } from "./Transcription.styles";
 import AudioInput from "../AudioInput";
 import TranscriptionTextArea from "../TranscriptionTextArea";
 import Button from "@mui/material/Button";
-import { recognizeSpeech } from "../../API";
+import { recognizeSpeech, sendFeedback } from "../../API";
 import Footer from "../Footer";
 import { TrackGoogleAnalyticsEvent } from "../../lib/GoogleAnalyticsUtil";
 import { detectAudioLanguage } from "../../API"; // Import the detectAudioLanguage function
@@ -40,7 +43,10 @@ const Transcription = () => {
   const [showNote, setShowNote] = useState(true);
   const [detectingLanguage, setDetectingLanguage] = useState(false); // State for language detection
   const [detectionError, setDetectionError] = useState(null); // Error handling state
-
+  const [feedback, setFeedback] = useState(""); // Feedback comments
+  const [rating, setRating] = useState(0); // Rating for transcription accuracy
+  const [transcriptionID, setTranscriptionID] = useState(null); // Store transcription ID
+ 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(textOutput);
@@ -70,6 +76,7 @@ const Transcription = () => {
           "Transcription Successful",
           "Transcribe Button"
         );
+        setTranscriptionID(transcript.audio_transcription_id); // Store transcription ID
       }
       setTextOutput(transcript.audio_transcription);
     } catch (e) {
@@ -82,6 +89,7 @@ const Transcription = () => {
   const handleAudioLoad = useCallback(async (audioData) => {
     setAudioData(audioData);
     setAudioSrc(URL.createObjectURL(audioData));
+    setTextOutput("");
     setDetectingLanguage(true); // Show full-screen loading during detection
     setDetectionError(null); // Clear any previous errors
 
@@ -105,9 +113,9 @@ const Transcription = () => {
     setLanguage(event.target.value);
   };
 
-  useEffect(() => {
-    console.log("Language updated to: " + language);
-  }, [language]);
+  // useEffect(() => {
+  //   console.log("Language updated to: " + language);
+  // }, [language]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -116,6 +124,54 @@ const Transcription = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  //New function to submit feedback
+  const handleFeedbackSubmit = async () => {
+    if (!textOutput || !transcriptionID) return;
+
+    console.log("feed back sent.");
+    console.log("Comment: " + rating);
+
+    const feedbackValue = rating >= 4 ? "Good" : "Bad";
+
+    console.log("User feed back: " + feedbackValue);
+    console.log("Comment: " + feedback);
+
+    // const feedbackData = {
+    //   userFeedback,
+    //   username: "ASR_USER",
+    //   sourceText: "",
+    //   transcription: textOutput,
+    //   audio_url: audioSrc,
+    //   transcriptionID,
+    //   from: language,
+    //   to: language,
+    //   comment: feedback,
+    // };
+
+    // console.log("Feed back data: " + feedbackData.audio_url)
+
+    setIsLoading(true);
+    const response = await sendFeedback(
+      feedbackValue,
+      "ASR_USER",
+      language,
+      textOutput,
+      audioSrc,
+      transcriptionID,
+      feedback
+    ).catch((e) => console.error("Feedback error:", e));
+
+    // console.log("Feed back response: " + response)
+
+    setIsLoading(false);
+    if (response) {
+      alert("Thank you for your feedback!");
+      setFeedback("");
+      setRating(0);
+    }
+  };
+
 
   return (
     <>
@@ -186,6 +242,43 @@ const Transcription = () => {
             copyToClipboard={copyToClipboard}
             copySuccess={copySuccess}
           />
+        )}
+
+         {/* Feedback Section */}
+         {textOutput && (
+          <FeedbackContainer>
+            <h3>Feedback</h3>
+            <p>Rate the transcription accuracy:</p>
+            <RatingStars>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  onClick={() => setRating(star)}
+                  style={{
+                    cursor: "pointer",
+                    color: star <= rating ? "gold" : "gray",
+                  }}
+                >
+                  ★
+                </span>
+              ))}
+            </RatingStars>
+            <FeedbackTextarea
+              placeholder="Any comments on the transcription?"
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+            />
+            <ButtonContainer>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleFeedbackSubmit}
+                disabled={isLoading}
+              >
+                Submit Feedback
+              </Button>
+            </ButtonContainer>
+          </FeedbackContainer>
         )}
       </DynamicMainContainer>
     </>

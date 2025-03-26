@@ -1,4 +1,5 @@
 import tw, { styled } from "twin.macro";
+import { Button } from "@mui/material"; // Import Button here
 
 export const MainContainer = styled.div`
   ${tw`
@@ -50,7 +51,7 @@ export const LanguageDropdown = styled.select`
 export const ResponsiveContainer = styled.div`
   ${tw`flex flex-col items-center justify-center w-full p-4 bg-white shadow-md rounded-lg`}
   h3 {
-    ${tw`text-center w-full`} // Ensures that the heading is always centered
+    ${tw`text-center w-full`}// Ensures that the heading is always centered
   }
   @media (min-width: 768px) {
     ${tw`flex-col justify-start items-start p-6`}
@@ -66,7 +67,7 @@ export const AudioPlayerContainer = styled.div`
 `;
 
 export const DynamicMainContainer = styled(MainContainer)`
-  padding-bottom: ${props => props.hasFooter ? '100px' : '0'};
+  padding-bottom: ${(props) => (props.hasFooter ? "100px" : "0")};
 `;
 
 export const Note = styled.div`
@@ -95,4 +96,60 @@ export const CloseButton = styled.button`
     cursor-pointer
     text-lg
   `}
+`;
+
+// New styles for the feedback section
+export const FeedbackContainer = styled.div`
+  ${tw`
+  w-full
+  flex
+  flex-col
+  items-center
+  p-4
+  mt-4
+  bg-gray-100
+  rounded-md
+  shadow-md
+`}
+`;
+
+export const RatingStars = styled.div`
+  ${tw`
+  flex
+  justify-center
+  mb-2
+`}
+  span {
+    ${tw`
+    text-2xl
+    cursor-pointer
+    transition
+    duration-200
+    ease-in-out
+  `}
+  }
+`;
+
+export const FeedbackTextarea = styled.textarea`
+  ${tw`
+  w-full
+  p-2
+  mt-2
+  border
+  border-gray-300
+  rounded-md
+  outline-none
+  resize-none
+`}
+  height: 100px;
+  &:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+  }
+`;
+
+export const SubmitFeedbackButton = styled(Button)`
+  ${tw`
+  mt-4
+`}
 `;

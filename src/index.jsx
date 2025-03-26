@@ -14,7 +14,7 @@ Hotjar.init(siteId, hotjarVersion);
 const root = createRoot(document.getElementById("root"));
 
 if (import.meta.env.MODE === "Production") {
-  ReactGA.initialize(`${process.env.REACT_APP_GA4_MEASUREMENT_ID}`, {
+  ReactGA.initialize(`${import.meta.env.VITE_GA4_MEASUREMENT_ID}`, {
     gaOptions: {
       anonymizeIp: true,
     },
