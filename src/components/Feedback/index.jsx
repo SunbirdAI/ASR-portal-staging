@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Alert, Button, TextField } from "@mui/material";
 import { ThumbDown, ThumbUp } from "@mui/icons-material";
 import { sendFeedback } from "../../API";

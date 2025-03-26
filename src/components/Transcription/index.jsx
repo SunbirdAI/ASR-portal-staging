@@ -23,6 +23,10 @@ const sourceOptions = [
   { label: "Lugbara", value: "lgg" },
   { label: "Runyankole", value: "nyn" },
   { label: "English", value: "eng" },
+  { label: "Swahili", value: "swa" },
+  { label: "Kinyarwanda", value: "kin" },
+  { label: "Lusoga", value: "xog" },
+  {label: "Lumasaba", value: "myx" },
 ];
 
 const Transcription = () => {

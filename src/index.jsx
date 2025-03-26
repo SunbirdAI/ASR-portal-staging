@@ -13,7 +13,7 @@ Hotjar.init(siteId, hotjarVersion);
 
 const root = createRoot(document.getElementById("root"));
 
-if (process.env.REACT_APP_NODE_ENV === "Production") {
+if (import.meta.env.MODE === "Production") {
   ReactGA.initialize(`${process.env.REACT_APP_GA4_MEASUREMENT_ID}`, {
     gaOptions: {
       anonymizeIp: true,
