@@ -35,7 +35,7 @@ const AudioInput = ({ onAudioSubmit, isLoading }) => {
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
             }
         };
-    }, []);
+    }, [mediaRecorder]);
 
     const toggleRecording = () => {
         if (!mediaRecorder) return;

@@ -21,7 +21,7 @@ const Files = () => {
         };
 
         fetchData();
-    }, []);
+    }, [transcriptData]);
 
     return (
 
