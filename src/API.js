@@ -1,17 +1,17 @@
 // import pRetry from "p-retry";
 
-const FEEDBACK_URL = process.env.REACT_APP_FEEDBACK_URL;
-// const HUGGING_FACE_API_KEY = process.env.REACT_APP_HUGGING_FACE_API_KEY;
-export const tracking_id = process.env.REACT_APP_GA4_TRACKING_ID;
+const FEEDBACK_URL = import.meta.env.VITE_FEEDBACK_URL;
+// const HUGGING_FACE_API_KEY = import.meta.env.VITE_HUGGING_FACE_API_KEY;
+export const tracking_id = import.meta.env.VITE_GA4_TRACKING_ID;
 export const token = localStorage.getItem("access_token")
   ? localStorage.getItem("access_token")
-  : process.env.REACT_APP_SB_API_TOKEN;
+  : import.meta.env.VITE_SB_API_TOKEN;
 
-const asrUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/stt`;
+const asrUrl = `${import.meta.env.VITE_SB_API_URL}/tasks/stt`;
 
-const asrDbUrl = `${process.env.REACT_APP_SB_API_URL}/transcriptions`;
+const asrDbUrl = `${import.meta.env.VITE_SB_API_URL}/transcriptions`;
 
-const autoDetectUrl = `${process.env.REACT_APP_SB_API_URL}/tasks/auto_detect_audio_language`;
+const autoDetectUrl = `${import.meta.env.VITE_SB_API_URL}/tasks/auto_detect_audio_language`;
 
 // const textToSpeechUrl = "https://api-inference.huggingface.co/models/Sunbird/sunbird-lug-tts";
 
@@ -22,9 +22,9 @@ export async function detectAudioLanguage(audioData) {
 
   try {
     const response = await fetch(autoDetectUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        Accept: 'application/json',
+        Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: formData,
@@ -35,7 +35,7 @@ export async function detectAudioLanguage(audioData) {
     }
 
     const data = await response.json();
-    return data;  // Ensure the response contains the detected language code
+    return data; // Ensure the response contains the detected language code
   } catch (error) {
     console.error("Error detecting language:", error);
     throw error;
@@ -155,7 +155,7 @@ export const registerNewAccount = async (values) => {
 
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_SB_API_URL}/auth/register`,
+      `${import.meta.env.VITE_SB_API_URL}/auth/register`,
       {
         method: "POST",
         headers: {
@@ -195,7 +195,7 @@ export const loginIntoAccount = async (values) => {
 
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_SB_API_URL}/auth/token`,
+      `${import.meta.env.VITE_SB_API_URL}/auth/token`,
       {
         method: "POST",
         headers: {
@@ -222,12 +222,12 @@ export const loginIntoAccount = async (values) => {
 
 export const sendFeedback = async (
   feedback,
-  CorrectTranslation,
   username,
-  sourceText,
-  translation,
-  from,
-  to
+  language,
+  transcription = null,
+  audio_url = null,
+  transcriptionID = null,
+  comment
 ) => {
   const time = Date.now();
   const requestOptions = {
@@ -235,15 +235,22 @@ export const sendFeedback = async (
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       Timestamp: time,
-      feedback: feedback,
-      SourceText: sourceText,
-      LanguageFrom: from,
-      LanguageTo: to,
-      username: username,
-      CorrectTranslation: CorrectTranslation,
-      TranslatedText: translation,
+      feedback,
+      Language: language,
+      username,
+      TranscriptionText: transcription,
+      AudioURL: audio_url,
+      TranscriptionID: transcriptionID,
+      Comment: comment,
+      FeedBackType: "ASRPortal",
     }),
   };
-  const response = await (await fetch(FEEDBACK_URL, requestOptions)).json();
-  return response;
+
+  try {
+    const response = await fetch(FEEDBACK_URL, requestOptions);
+    return await response.json();
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
 };

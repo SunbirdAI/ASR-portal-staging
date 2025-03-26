@@ -23,7 +23,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm install --save-dev @babel/plugin-proposal-private-property-in-object
+    # - run: npm install --save-dev @babel/plugin-proposal-private-property-in-object
     - run: npm run build --if-present
 
     - name: Install Cypress
@@ -38,8 +38,8 @@ jobs:
         npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REACT_APP_SB_API_URL: ${{ secrets.REACT_APP_SB_API_URL }}
-        REACT_APP_SB_API_TOKEN: ${{ secrets.REACT_APP_SB_API_TOKEN }}
-        REACT_APP_GA4_TRACKING_ID: ${{ secrets.REACT_APP_GA4_TRACKING_ID }}
-        REACT_APP_GA4_MEASUREMENT_ID: ${{ secrets.REACT_APP_GA4_MEASUREMENT_ID }}
-        REACT_APP_FEEDBACK_URL: ${{ secrets.REACT_APP_FEEDBACK_URL }}
+        VITE_SB_API_URL: ${{ secrets.VITE_SB_API_URL }}
+        VITE_SB_API_TOKEN: ${{ secrets.VITE_SB_API_TOKEN }}
+        VITE_GA4_TRACKING_ID: ${{ secrets.VITE_GA4_TRACKING_ID }}
+        VITE_GA4_MEASUREMENT_ID: ${{ secrets.VITE_GA4_MEASUREMENT_ID }}
+        VITE_FEEDBACK_URL: ${{ secrets.VITE_FEEDBACK_URL }}
